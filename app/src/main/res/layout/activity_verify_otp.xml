@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/base_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="@dimen/_180sdp"
+        android:layout_height="@dimen/_180sdp"
+        android:src="@mipmap/logo"
+        android:padding="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/iv_logo"
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_forgot_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:text="@string/otp_verify"
+                android:textSize="@dimen/_16sdp"/>
+
+
+            <EditText
+                android:id="@+id/et_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:gravity="start"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:textColor="@color/black"
+                android:inputType="phone"
+                android:background="@drawable/et_bg_white"
+                android:hint="@string/enter_otp"
+                android:textSize="@dimen/_12sdp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp">
+                <TextView
+                    android:id="@+id/tv_not_receive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="start"
+                    android:textColor="@color/d_grey"
+                    android:text="@string/not_received"
+                    android:textSize="@dimen/_10sdp"/>
+                <TextView
+                    android:id="@+id/tv_back_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:gravity="start"
+                    android:layout_toEndOf="@+id/tv_not_receive"
+                    android:textColor="@color/purple_500"
+                    android:text="@string/resend_otp"
+                    android:textSize="@dimen/_10sdp"/>
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:padding="@dimen/_10sdp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/verify"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:background="@drawable/tv_bg_green"
+                android:textSize="@dimen/_14sdp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/d_grey"
+        android:text="@string/copyright"
+        android:textSize="@dimen/_12sdp"/>
+</RelativeLayout>

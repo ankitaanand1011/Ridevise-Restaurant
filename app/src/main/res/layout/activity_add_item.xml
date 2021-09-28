@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/dark_green">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_5sdp"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_customer"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="wrap_content"
+            android:text="@string/add_orders"
+            android:layout_toEndOf="@+id/iv_back"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
+            android:textAllCaps="true"
+
+            android:padding="@dimen/_5sdp"/>
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/light_green">
+
+        <EditText
+            android:id="@+id/tv_search_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textAllCaps="true"
+            android:hint="@string/search_item"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:visibility="gone"
+            android:textSize="@dimen/_12sdp"
+            android:drawableEnd="@mipmap/search"
+            android:background="@drawable/et_bg_white"
+            />
+
+        <androidx.appcompat.widget.SearchView
+            xmlns:n2="http://schemas.android.com/tools"
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_item"
+            android:background="@drawable/et_bg_white"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
+            n2:searchIcon="@mipmap/search" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_select_orders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@+id/rl_search"
+
+        android:layout_centerHorizontal="true"
+
+       >
+
+        <TextView
+            android:id="@+id/tv_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_solid_green_left_side"
+            android:gravity="end"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/all"
+
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:id="@+id/tv_veg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="@string/veg"
+            android:textAllCaps="true"
+            android:padding="@dimen/_10sdp"
+            android:layout_toEndOf="@+id/tv_all"
+            android:layout_gravity="center"
+
+            android:background="@drawable/tv_bg_green_center"
+            android:textSize="@dimen/_12sdp"/>
+        <TextView
+            android:id="@+id/tv_nonveg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:text="@string/nonveg"
+            android:textAllCaps="true"
+            android:padding="@dimen/_10sdp"
+            android:layout_toEndOf="@+id/tv_veg"
+
+            android:background="@drawable/tv_bg_green_right_side"
+            android:layout_gravity="center"
+            android:textSize="@dimen/_12sdp"/>
+
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/grey_border"
+        android:layout_below="@+id/ll_select_orders"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view"
+        android:layout_above="@+id/rl_bottom"
+        android:layout_margin="@dimen/_10sdp"
+
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+
+
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_veg_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:visibility="gone"
+
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_non_veg_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:visibility="gone"
+
+
+
+            />
+
+    </RelativeLayout>
+
+
+   <RelativeLayout
+       android:id="@+id/rl_bottom"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:background="@drawable/tv_bg_green"
+       >
+       <TextView
+           android:id="@+id/tv_item_count"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:padding="@dimen/_10sdp"
+           android:gravity="start"
+           android:textColor="@color/white"
+           android:layout_centerVertical="true"
+           android:textAllCaps="true"
+           android:layout_gravity="center"
+           android:textSize="@dimen/_14sdp"/>
+
+       <TextView
+           android:id="@+id/tv_view_cart"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:paddingTop="@dimen/_10sdp"
+           android:paddingBottom="@dimen/_10sdp"
+           android:paddingStart="@dimen/_20sdp"
+           android:paddingEnd="@dimen/_20sdp"
+           android:layout_alignParentEnd="true"
+           android:layout_centerVertical="true"
+           android:background="@drawable/et_bg_white"
+           android:textColor="@color/dark_green"
+           android:text="@string/view_cart"
+           android:layout_margin="10dp"
+           android:textAllCaps="true"
+           android:layout_gravity="center"
+           android:textSize="@dimen/_12sdp"/>
+
+   </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"
+        android:visibility="gone"
+        android:background="@color/opacity_light_grey">
+
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.FadingCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            app:SpinKit_Color="@color/d_grey" />
+    </RelativeLayout>
+
+</RelativeLayout>
