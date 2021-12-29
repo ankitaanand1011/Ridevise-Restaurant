@@ -31,7 +31,10 @@ import com.restaurant.ridewise.activities.OrderActivity;
 import com.restaurant.ridewise.util.ApplicationConstants;
 import com.restaurant.ridewise.util.GlobalClass;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -64,26 +67,104 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
          String order_id= item_list.get(position).get("order_id");
          String user_id= item_list.get(position).get("user_id");
          String address= item_list.get(position).get("address");
          String total_price= item_list.get(position).get("total_price");
          String order_status= item_list.get(position).get("order_status");
+         String order_date= item_list.get(position).get("order_date");
+         String order_time= item_list.get(position).get("order_time");
+         String customer_name= item_list.get(position).get("user_name");
+         String payment_status= item_list.get(position).get("payment_status");
 
 
          double price= Double.parseDouble(total_price);
         holder.tv_order_name.setText(address);
+        holder.tv_order_no.setText("#"+order_id);
+
+        holder.tv_customer_name.setText(customer_name+",");
         holder.tv_price.setText("₹  "+String.format("%.2f", price));
+
+        SimpleDateFormat spf=new SimpleDateFormat("yyyy-MM-dd");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(order_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd-MM-yyyy");
+        String date = spf.format(newDate);
+        System.out.println(date);
+
+
+        SimpleDateFormat spf1=new SimpleDateFormat("hh:mm:ss");
+        Date newDate1= null;
+        try {
+            newDate1 = spf1.parse(order_time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("hh:mm aaa");
+        String time = spf.format(newDate1);
+        System.out.println(time);
+
+
+
+        holder.tv_order_date.setText(date+"  "+time);
+
+
+        if (payment_status != null) {
+            switch (payment_status) {
+                case "0":
+                    holder.tv_payment_mode.setText("COD");
+                    break;
+                case "1":
+                    holder.tv_payment_mode.setText("Online Mode");
+                    break;
+
+            }
+        }
+
+        if (order_status != null) {
+            switch (order_status) {
+                case "1":
+                    holder.tv_order_status.setText("Order Placed");
+                    break;
+                case "2":
+                    holder.tv_order_status.setText("Out for Collect");
+                    break;
+                case "3":
+                    holder.tv_order_status.setText("Reached to Restaurant");
+                    break;
+                case "4":
+                    holder.tv_order_status.setText("Start");
+                    break;
+                case "5":
+                    holder.tv_order_status.setText("Reached to Customer");
+                    break;
+                case "6":
+                    holder.tv_order_status.setText("Delivered");
+                    break;
+                case "7":
+                    holder.tv_order_status.setText("Cancelled");
+                    break;
+            }
+        }
 
 
         Typeface regular = Typeface.createFromAsset(context.getAssets(), "fonts/POPPINS-REGULAR.TTF");
         Typeface light = Typeface.createFromAsset(context.getAssets(), "fonts/POPPINS-LIGHT.TTF");
         Typeface semi_bold = Typeface.createFromAsset(context.getAssets(), "fonts/POPPINS-SEMIBOLD.TTF");
 
+        holder.tv_order_no.setTypeface(semi_bold);
+        holder.tv_customer_name.setTypeface(semi_bold);
         holder.tv_order_name.setTypeface(regular);
         holder.tv_price.setTypeface(regular);
+        holder.tv_order_date.setTypeface(regular);
+        holder.tv_payment_mode.setTypeface(regular);
+        holder.tv_order_status.setTypeface(regular);
 
 
 
@@ -168,7 +249,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
 
 
-        TextView tv_order_name,tv_price;
+        TextView tv_order_name,tv_price,tv_order_no,tv_order_date,
+                tv_payment_mode,tv_order_status,tv_customer_name;
         RelativeLayout rl_main;
 
         ImageView iv_order;
@@ -178,7 +260,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
 
             iv_order = itemView.findViewById(R.id.iv_order);
+            tv_order_no = itemView.findViewById(R.id.tv_order_no);
             tv_order_name = itemView.findViewById(R.id.tv_order_name);
+            tv_order_date = itemView.findViewById(R.id.tv_order_date);
+            tv_payment_mode = itemView.findViewById(R.id.tv_payment_mode);
+            tv_order_status = itemView.findViewById(R.id.tv_order_status);
+            tv_customer_name = itemView.findViewById(R.id.tv_customer_name);
 
             tv_price = itemView.findViewById(R.id.tv_price);
 

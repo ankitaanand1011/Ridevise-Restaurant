@@ -9,8 +9,6 @@
         android:id="@+id/rl_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-
         >
 
 
@@ -25,52 +23,138 @@
                 android:id="@+id/iv_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/order_new"
-                android:padding="@dimen/_3sdp"
                 android:layout_centerInParent="true"
-                android:scaleType="centerCrop"/>
+                android:padding="@dimen/_3sdp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/order_new" />
 
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_toStartOf="@+id/rl_arrow"
+        <RelativeLayout
+            android:id="@+id/rl_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical"
             android:layout_toEndOf="@+id/rl_img"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/tv_order_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:layout_centerVertical="true"
+                android:textColor="@color/dark_green"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_order_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="start"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp"
+                />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/rl_arrow"
+            android:layout_toEndOf="@+id/rl_img"
+            android:layout_below="@+id/rl_top"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+
 
             >
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold" />
+
+
                 <TextView
                     android:id="@+id/tv_order_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:textStyle="bold"
+                    android:layout_below="@+id/tv_customer_name"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_14sdp"/>
+                    android:textSize="@dimen/_12sdp"
+                    />
 
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:singleLine="true"
+                android:layout_marginTop="@dimen/_5sdp">
 
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/_14sdp"
-                android:drawablePadding="@dimen/_5sdp"
-                />
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+                <TextView
+                    android:id="@+id/tv_payment_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:layout_toEndOf="@+id/tv_price"
+                    android:singleLine="true"
+                    android:padding="@dimen/_5sdp"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_light_grey"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10sdp" />
 
+                <TextView
+                    android:id="@+id/tv_order_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_d_green"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="start"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_toEndOf="@+id/tv_payment_mode"
+                    android:padding="@dimen/_5sdp"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
 
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -79,6 +163,7 @@
             android:id="@+id/rl_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_top"
             android:layout_alignParentEnd="true">
 
             <ImageView
@@ -99,7 +184,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
         android:background="@color/grey_border"/>
 
 

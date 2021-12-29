@@ -427,6 +427,7 @@ public class AddItemActivity extends AppCompatActivity {
         rl_progress.setVisibility(View.VISIBLE);
         final String tag_string_req = "search_item";
         String url = ApplicationConstants.search_item;
+        Log.d(TAG, "search_list url: "+url);
 
         try{
             StringRequest strReq = new StringRequest(Request.Method.POST,

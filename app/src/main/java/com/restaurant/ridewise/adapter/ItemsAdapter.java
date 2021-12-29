@@ -1,5 +1,6 @@
 package com.restaurant.ridewise.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         String menu_name= item_list.get(position).get("menu_name");
         String category_id= item_list.get(position).get("category_id");
@@ -111,6 +112,28 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             }
         });
 
+        holder.iv_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int count= Integer.parseInt(String.valueOf(holder.tv_count.getText()));
+
+                count++;
+                holder.tv_count.setText(String.valueOf(count));
+
+
+                String menu_id = item_list.get(position).get("menu_id");
+                String price= item_list.get(position).get("price");
+
+                assert price != null;
+                double total_price_acc_qty = count * Double.parseDouble(price);
+                Log.d(TAG, "onClick: total_price_acc_qty >" + total_price_acc_qty);
+
+
+
+                add_cart(String.valueOf(count),menu_id,total_price_acc_qty,holder.ll_count);
+            }
+        });
 
 
         holder.iv_minus.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +143,27 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
                     holder.ll_count.setVisibility(View.GONE);
                     holder.tv_add.setVisibility(View.VISIBLE);
+                }
+
+                int count= Integer.parseInt(String.valueOf(holder.tv_count.getText()));
+
+                if(count>1) {
+
+                    //2. enter code here
+
+                    count--;
+
+                    holder.tv_count.setText(String.valueOf(count));
+                    String menu_id = item_list.get(position).get("menu_id");
+                    String price= item_list.get(position).get("price");
+
+                    assert price != null;
+                    double total_price_acc_qty = count * Double.parseDouble(price);
+                    Log.d(TAG, "onClick: total_price_acc_qty >" + total_price_acc_qty);
+
+
+
+                    add_cart(String.valueOf(count),menu_id,total_price_acc_qty,holder.ll_count);
                 }
             }
         });
@@ -137,7 +181,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
 
         TextView tv_item_name,tv_price,tv_count,tv_add;
-        ImageView iv_veg_sign,iv_minus;
+        ImageView iv_veg_sign,iv_minus,iv_plus;
         LinearLayout ll_count;
 
         ViewHolder(View itemView) {
@@ -151,6 +195,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             tv_add = itemView.findViewById(R.id.tv_add);
             ll_count = itemView.findViewById(R.id.ll_count);
             iv_minus = itemView.findViewById(R.id.iv_minus);
+            iv_plus = itemView.findViewById(R.id.iv_plus);
 
 
 
@@ -250,6 +295,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                     // Posting parameters to login url
                     Map<String, String> params = new HashMap<>();
                     params.put("user_id",globalClass.getUser_id());
+                    params.put("user_lat",globalClass.getUser_lat());
+                    params.put("user_long",globalClass.getUser_long());
                     params.put("menu_id",menu_id);
                     params.put("qty",qty);
                     params.put("res_id",globalClass.getId());

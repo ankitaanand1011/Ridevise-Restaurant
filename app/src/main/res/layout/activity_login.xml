@@ -70,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_10sdp"
                 android:gravity="start"
+                android:visibility="gone"
                 android:textColor="@color/purple_500"
                 android:text="@string/forgot_password"
                 android:textSize="@dimen/_10sdp"/>

@@ -1,11 +1,19 @@
 package com.restaurant.ridewise.activities;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,11 +34,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.restaurant.ridewise.R;
 import com.restaurant.ridewise.util.ApplicationConstants;
+import com.restaurant.ridewise.util.Config;
 import com.restaurant.ridewise.util.GlobalClass;
+import com.restaurant.ridewise.util.NotificationUtils;
 import com.restaurant.ridewise.util.Shared_Preference;
 import com.sanojpunchihewa.updatemanager.UpdateManager;
 import com.sanojpunchihewa.updatemanager.UpdateManagerConstant;
@@ -46,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText et_mobile,et_password;
     SpinKitView spinKitView;
     String device_id;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    String msg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,11 +100,67 @@ public class LoginActivity extends AppCompatActivity {
         String login_text = "Please Login to \\nmanage your activities";
         device_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+        Log.d(TAG, "function device_id: "+device_id);
 
         Typeface regular = Typeface.createFromAsset(getAssets(), "fonts/POPPINS-REGULAR.TTF");
         Typeface medium = Typeface.createFromAsset(getAssets(), "fonts/POPPINS-MEDIUM.TTF");
         Typeface light = Typeface.createFromAsset(getAssets(), "fonts/POPPINS-LIGHT.TTF");
         Typeface semi_bold = Typeface.createFromAsset(getAssets(), "fonts/POPPINS-SEMIBOLD.TTF");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId  = getString(R.string.default_notification_channel_id);
+            String channelName = getString(R.string.default_notification_channel_name);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW));
+        }
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+                         msg = getString(R.string.msg_token_fmt, token);
+                        Log.d(TAG, msg);
+                     //   Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+
+                    displayFirebaseRegId();
+
+                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                  //  txtMessage.setText(message);
+                }
+            }
+        };
+
+        displayFirebaseRegId();
 
         if(globalClass.getLogin_status()){
 
@@ -136,6 +209,8 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void login_using_password(final String mobile,final String password) {
         // Tag used to cancel the request
         final String tag_string_req = "req_login";
@@ -178,6 +253,8 @@ public class LoginActivity extends AppCompatActivity {
                             String res_image = data.get("res_image").getAsString().replaceAll("\"", "");
                             String open_time = data.get("open_time").getAsString().replaceAll("\"", "");
                             String close_time = data.get("close_time").getAsString().replaceAll("\"", "");
+                            String res_lat = data.get("res_lat").getAsString().replaceAll("\"", "");
+                            String res_long = data.get("res_long").getAsString().replaceAll("\"", "");
 
                             Log.d(TAG, "onResponse:id>>>> " + id);
                             Log.d(TAG, "onResponse:res_name>>> " + res_name);
@@ -187,14 +264,17 @@ public class LoginActivity extends AppCompatActivity {
 
                             globalClass.setId(id);
                             globalClass.setRes_phone(res_phone);
+                            globalClass.setRes_lat(res_lat);
+                            globalClass.setRes_long(res_long);
+                            globalClass.setOpen_time(open_time);
+                            globalClass.setClose_time(close_time);
                            /* globalClass.setRes_name(res_name);
                             globalClass.setRes_email(res_email);
                             globalClass.setRes_address(res_address);
                             globalClass.setRes_address2(res_address2);
                             globalClass.setPostal_code(postal_code);
                             globalClass.setRes_image(res_image);
-                            globalClass.setOpen_time(open_time);
-                            globalClass.setClose_time(close_time);*/
+                           */
                             globalClass.setLogin_status(true);
                             shared_preference.savePrefrence();
 
@@ -209,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         }else{
                             spinKitView.setVisibility(View.GONE);
-
+                            tv_login.setEnabled(true);
                             Toasty.error(LoginActivity.this, message, Toast.LENGTH_SHORT, true).show();
 
                             //Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
@@ -233,6 +313,7 @@ public class LoginActivity extends AppCompatActivity {
                             "Connection Error", Toast.LENGTH_LONG).show();
                     //  pd.dismiss();
                   //  mView.hideDialog();
+                    tv_login.setEnabled(true);
                 }
             }) {
 
@@ -244,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     params.put("phone", mobile);
                     params.put("password", password);
-                    params.put("device_id", device_id);
+                    params.put("device_id", msg);
                     params.put("device_type", "android");
 
 
@@ -261,4 +342,40 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void displayFirebaseRegId() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String regId = pref.getString("regId", null);
+
+        Log.d(TAG, "Firebase reg id: " + regId);
+
+     /*   if (!TextUtils.isEmpty(regId))
+            txtRegId.setText("Firebase Reg Id: " + regId);
+        else
+            txtRegId.setText("Firebase Reg Id is not received yet!");*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.PUSH_NOTIFICATION));
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(getApplicationContext());
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
 }

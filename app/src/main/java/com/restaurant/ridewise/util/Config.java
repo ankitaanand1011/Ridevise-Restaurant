@@ -1,4 +1,4 @@
-package com.sample.project.notificationsampleproject;
+package com.restaurant.ridewise.util;
 
 public class Config {
 

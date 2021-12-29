@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +52,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 import es.dmoral.toasty.Toasty;
@@ -62,12 +64,13 @@ public class ProfileInfoActivity extends AppCompatActivity {
     SpinKitView spinKitView;
 
     TextView tv_header,tv_res_name,tv_res_mobile,tv_contact_person,tv_location,tv_full_address,tv_save;
-    EditText et_res_name,et_res_mobile,et_contact_person,et_location,et_full_address;
+    EditText et_res_name,et_res_mobile,et_contact_person,et_location,et_full_address,et_open_time,et_close_time;
     ImageView iv_back,iv_profile,iv_add_image;
     String res_name, res_phone, res_address, res_address2, postal_code,res_image,contact_person,res_email;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     File p_image;
     String mCameraFileName = "";
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -102,6 +105,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         et_location = findViewById(R.id.et_location);
         tv_full_address = findViewById(R.id.tv_full_address);
         et_full_address = findViewById(R.id.et_full_address);
+        et_open_time = findViewById(R.id.et_open_time);
+        et_close_time = findViewById(R.id.et_close_time);
         tv_save = findViewById(R.id.tv_save);
     }
 
@@ -139,6 +144,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         et_contact_person.setText(contact_person);
         et_location.setText(res_address);
         et_full_address.setText(res_address2);
+        et_open_time.setText(globalClass.getOpen_time());
+        et_close_time.setText(globalClass.getClose_time());
 
         RequestOptions options = new RequestOptions()
                 .centerInside()
@@ -198,13 +205,21 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 builder.setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                      /*  if (options[item].equals("Take Photo")) {
+                        if (options[item].equals("Take Photo")) {
                             dialog.dismiss();
                           //  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                             StrictMode.setVmPolicy(builder.build());
-                            Intent intent = new Intent();
-                            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
+
+
+
+                          /*  Intent intent = new Intent();
+                           // intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
                             String newPicFile = System.currentTimeMillis() + ".jpg";
 
@@ -218,12 +233,12 @@ public class ProfileInfoActivity extends AppCompatActivity {
                             File outFile = new File(outPath, newPicFile);
                             Log.d(TAG, "onClick: outFile>>> "+outFile);
 
-                            mCameraFileName = outFile.toString();
+                           // mCameraFileName = outFile.toString();
                             Uri outuri = Uri.fromFile(outFile);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, outuri);
                           //  startActivityForResult(intent, CAMERA_REQUEST);
-                            startActivityForResult(intent, PICK_IMAGE_CAMERA);
-                        } else*/ if (options[item].equals("Choose From Gallery")) {
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA);*/
+                        } else if (options[item].equals("Choose From Gallery")) {
                             dialog.dismiss();
                             Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
@@ -245,7 +260,9 @@ public class ProfileInfoActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
+        Log.d(TAG, "onActivityResult: requestCode >>>  "+ requestCode);
+        Log.d(TAG, "onActivityResult: resultCode >>>  "+ resultCode);
+        Log.d(TAG, "onActivityResult: data >>>  "+ data);
 
 
 
@@ -268,8 +285,12 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-/*
         if (requestCode == PICK_IMAGE_CAMERA && resultCode == RESULT_OK) {
+
+
+            Log.d(TAG, "onActivityResult: PICK_IMAGE_CAMERA  ");
+            Log.d(TAG, "onActivityResult: requestCode >>>  "+ requestCode);
+            Log.d(TAG, "onActivityResult: resultCode >>>  "+ resultCode);
 
 
             File f = new File(Environment.getExternalStorageDirectory().toString());
@@ -282,7 +303,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
 
             try {
-                Bitmap bitmap;
+
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 
 
@@ -297,8 +318,14 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 Log.d(TAG, "bitmap: "+bitmap);
 
                 iv_profile.setImageBitmap(bitmap);
+
+                if(isStoragePermissionGranted()){
+                    SaveImage(bitmap);
+                }
+
+
                 // Glide.with(ProfileInfoActivity.this).load(p_image).apply(options).into(iv_profile);
-                String path = Environment.getExternalStorageDirectory()+File.separator;
+              /*  String path = Environment.getExternalStorageDirectory()+File.separator;
                 // + File.separator
                 //   + "Phoenix" + File.separator + "default";
                 f.delete();
@@ -318,7 +345,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -326,12 +353,89 @@ public class ProfileInfoActivity extends AppCompatActivity {
             // Bitmap photo = (Bitmap) data.getExtras().get("data");
             // iv_product_image.setImageBitmap(photo);
                     }
-*/
 
 
     }
 
+    private void SaveImage(Bitmap finalBitmap) {
 
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        myDir.mkdirs();
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(ProfileInfoActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PICK_IMAGE_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(ProfileInfoActivity.this, "Permission granted", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ProfileInfoActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            case 2: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(ProfileInfoActivity.this, "Permission granted", Toast.LENGTH_SHORT).show();
+                    SaveImage(bitmap);
+                } else {
+                    Toast.makeText(ProfileInfoActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
 
 
     public String getRealPathFromUri(Uri contentUri) {
@@ -402,8 +506,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         params.put("address1",et_location.getText().toString());
         params.put("email","test@test.com");
         params.put("phone",et_res_mobile.getText().toString());
-        params.put("open_time","10:00 AM");
-        params.put("close_time","9:00 PM");
+        params.put("open_time",et_open_time.getText().toString());
+        params.put("close_time",et_close_time.getText().toString());
         params.put("res_address2",et_full_address.getText().toString());
         params.put("contact_person",et_contact_person.getText().toString());
 

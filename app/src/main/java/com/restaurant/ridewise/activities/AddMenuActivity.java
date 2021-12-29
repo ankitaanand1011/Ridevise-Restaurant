@@ -205,8 +205,6 @@ public class AddMenuActivity extends AppCompatActivity {
 
 
 
-
-
        // switch_compat.setOnCheckedChangeListener(onCheckedChanged());
         switch_compat1.setOnCheckedChangeListener(onCheckedChanged());
 

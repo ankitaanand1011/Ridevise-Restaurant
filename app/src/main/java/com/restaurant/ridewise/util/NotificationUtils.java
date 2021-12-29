@@ -1,4 +1,4 @@
-package com.sample.project.notificationsampleproject;
+package com.restaurant.ridewise.util;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -16,9 +16,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 
 import androidx.core.app.NotificationCompat;
+
+import com.restaurant.ridewise.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NotificationUtils {
-    private static String TAG = NotificationUtils.class.getSimpleName();
+    private static String TAG = "notify_util";
 
     private Context mContext;
 
@@ -79,6 +82,8 @@ public class NotificationUtils {
                 }
             }
         } else {
+
+            Log.d(TAG, "showNotificationMessage: ");
             showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
             playNotificationSound();
         }
@@ -86,7 +91,7 @@ public class NotificationUtils {
 
 
     private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
-
+        Log.d(TAG, "showSmallNotification: ");
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         inboxStyle.addLine(message);
@@ -99,7 +104,7 @@ public class NotificationUtils {
                 .setSound(alarmSound)
                 .setStyle(inboxStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.app_logo1)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
@@ -121,7 +126,7 @@ public class NotificationUtils {
                 .setSound(alarmSound)
                 .setStyle(bigPictureStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.app_logo1)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();

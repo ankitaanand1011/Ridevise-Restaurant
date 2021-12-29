@@ -20,5 +20,6 @@
     <color name="opacity_light_grey">#60ffffff</color>
     <color name="green">#95D79D</color>
     <color name="bg_color_screen">#EEEEEE</color>
+    <color name="transparent">#0000ffff</color>
 
 </resources>

@@ -126,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/online_payment"
+                android:visibility="gone"
                 android:buttonTint="@color/black"
                 android:textSize="@dimen/_12sdp"/>
 

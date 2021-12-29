@@ -1,5 +1,6 @@
 package com.restaurant.ridewise.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -45,7 +46,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         Typeface regular = Typeface.createFromAsset(context.getAssets(), "fonts/POPPINS-REGULAR.TTF");
         Typeface light = Typeface.createFromAsset(context.getAssets(), "fonts/POPPINS-LIGHT.TTF");
@@ -59,9 +60,12 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
 
         String order_no= order_list.get(position).get("order_id");
+        String user_name= order_list.get(position).get("user_name");
         holder.tv_order_no.setText("#"+order_no);
         String order_date= order_list.get(position).get("order_date");
         String order_time= order_list.get(position).get("order_time");
+
+        holder.tv_branch_name.setText(user_name);
 
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a");
@@ -110,8 +114,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 intent.putExtra("sub_total",order_list.get(position).get("sub_total"));
                 intent.putExtra("delivery_charge",order_list.get(position).get("delivery_charge"));
                 intent.putExtra("tax_charge",order_list.get(position).get("tax_charge"));
-                intent.putExtra("delivery_date",order_list.get(position).get("delivery_date"));
-                intent.putExtra("delivery_time",order_list.get(position).get("delivery_time"));
+              //  intent.putExtra("delivery_date",order_list.get(position).get("delivery_date"));
+              //  intent.putExtra("delivery_time",order_list.get(position).get("delivery_time"));
                 intent.putExtra("status",order_list.get(position).get("status"));
                 context.startActivity(intent);
             }

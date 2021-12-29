@@ -1,5 +1,6 @@
 package com.restaurant.ridewise.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -79,7 +80,11 @@ public class PaymentActivity extends AppCompatActivity {
         String delivery_charge= getIntent().getStringExtra("delivery_charge");
         String tax_charge= getIntent().getStringExtra("tax_charge");
 
-        tv_total_value.setText("₹  "+total_amount);
+        double s_total = Double.parseDouble(total_amount);
+        @SuppressLint("DefaultLocale")
+        String su_total = String.format("%.2f", s_total);
+        tv_total_value.setText("₹  "+su_total);
+
         final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String time = dateFormat.format(new Date());
         Log.d(TAG, "function: time"+time);
@@ -182,8 +187,8 @@ public class PaymentActivity extends AppCompatActivity {
                     // Posting parameters to login url
                     Map<String, String> params = new HashMap<>();
                     params.put("user_id",globalClass.getUser_id());
-                    params.put("lat","");
-                    params.put("long","");
+                    params.put("lat",globalClass.getRes_lat());
+                    params.put("long",globalClass.getRes_long());
                     params.put("address",globalClass.getUser_address());
                     params.put("total_price",total_amount);
                     params.put("user_lat",globalClass.getUser_lat());
@@ -193,6 +198,8 @@ public class PaymentActivity extends AppCompatActivity {
                     params.put("delivery_charge",delivery_charge);
                     params.put("sub_total",sub_total);
                     params.put("tax_charge",tax_charge);
+                    params.put("payment_type","1");
+                    params.put("user_address_id",globalClass.getUser_address_id());
 
                     Log.d(TAG, "getParams: "+params);
                     return params;

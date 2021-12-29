@@ -26,9 +26,10 @@ import static android.os.Build.VERSION.SDK_INT;
 public class GlobalClass extends Application {
 
     public Boolean login_status = false;
-    String id,  res_name, res_email, res_phone,res_address,res_address2,postal_code,res_image,open_time,close_time;
+    String id,  res_name, res_email, res_phone,res_address,res_address2,postal_code,res_image,
+            open_time,close_time, res_lat, res_long;
     String  cart_item_count="0";
-    String user_id, user_name, user_email, user_phn, user_address, user_pin, user_lat, user_long;
+    String user_id,user_address_id ,user_name, user_email, user_phn, user_address, user_pin, user_lat, user_long;
     String cart_item;
     double total_item_price_acc_qty = 0.0;
     private static RequestQueue mRequestQueue;
@@ -252,6 +253,14 @@ public class GlobalClass extends Application {
         this.user_long = user_long;
     }
 
+    public String getUser_address_id() {
+        return user_address_id;
+    }
+
+    public void setUser_address_id(String user_address_id) {
+        this.user_address_id = user_address_id;
+    }
+
     public String getCart_item() {
         return cart_item;
     }
@@ -266,5 +275,21 @@ public class GlobalClass extends Application {
 
     public void setTotal_item_price_acc_qty(double total_item_price_acc_qty) {
         this.total_item_price_acc_qty = total_item_price_acc_qty;
+    }
+
+    public String getRes_lat() {
+        return res_lat;
+    }
+
+    public void setRes_lat(String res_lat) {
+        this.res_lat = res_lat;
+    }
+
+    public String getRes_long() {
+        return res_long;
+    }
+
+    public void setRes_long(String res_long) {
+        this.res_long = res_long;
     }
 }

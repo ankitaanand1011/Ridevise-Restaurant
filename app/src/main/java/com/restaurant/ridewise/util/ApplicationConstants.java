@@ -3,8 +3,8 @@ package com.restaurant.ridewise.util;
 public class ApplicationConstants {
 
 
-   // private static final String baseApi = "https://mobileappsgamesstudio.com/works/ridevise/api/restaurant/";
-    private static final String baseApi = "http://ridevvise.com/api/restaurant/";
+    private static final String baseApi = "https://mobileappsgamesstudio.com/works/ridevise/api/restaurant/";
+  //  private static final String baseApi = "http://ridevvise.com/api/restaurant/";
     public static final String login =  baseApi+"login";
     public static final String change_password =  baseApi+"change_password";
     public static final String profile =  baseApi+"profile";
@@ -25,6 +25,9 @@ public class ApplicationConstants {
     public static final String order_details =  baseApi+"order_details";
     public static final String cart_update =  baseApi+"cart_update";
     public static final String profile_update =  baseApi+"profile_update";
+    public static final String state_list =  baseApi+"state_list";
+    public static final String city_list =  baseApi+"city_list";
+    public static final String add_address =  baseApi+"add_address";
 
 
 }

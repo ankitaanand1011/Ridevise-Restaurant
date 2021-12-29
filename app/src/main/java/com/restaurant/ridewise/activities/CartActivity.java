@@ -1,5 +1,6 @@
 package com.restaurant.ridewise.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -206,14 +207,28 @@ public class CartActivity extends AppCompatActivity {
 
                                 item_list.add(hashMap);
                             }
+                            double s_total = Double.parseDouble(sub_total);
+                            @SuppressLint("DefaultLocale")
+                            String su_total = String.format("%.2f", s_total);
 
+                            double s_delivery_charge = Double.parseDouble(delivery_charge);
+                            @SuppressLint("DefaultLocale")
+                            String su_delivery_charge = String.format("%.2f", s_delivery_charge);
 
-                            tv_subtotal_value.setText("₹  "+sub_total);
-                            tv_delivery_value.setText("₹  "+delivery_charge);
-                            tv_tax_value.setText("₹  "+tax_charge);
-                            tv_total_value.setText("₹  "+total_payable);
+                            double s_tax_charge = Double.parseDouble(tax_charge);
+                            @SuppressLint("DefaultLocale")
+                            String su_tax_charge = String.format("%.2f", s_tax_charge);
 
-                            String item_count = cart_details.size() +" ITEMS  ₹ "+total_payable;
+                            double s_total_payable = Double.parseDouble(total_payable);
+                            @SuppressLint("DefaultLocale")
+                            String su_total_payable = String.format("%.2f", s_total_payable);
+
+                            tv_subtotal_value.setText("₹  "+su_total);
+                            tv_delivery_value.setText("₹  "+su_delivery_charge);
+                            tv_tax_value.setText("₹  "+su_tax_charge);
+                            tv_total_value.setText("₹  "+su_total_payable);
+
+                            String item_count = cart_details.size() +" ITEMS  ₹ "+su_total_payable;
                             tv_item_count.setText(item_count);
 
 
@@ -260,6 +275,8 @@ public class CartActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put("res_id",globalClass.getId());
                     params.put("user_id",globalClass.getUser_id());
+                    params.put("user_lat",globalClass.getUser_lat());
+                    params.put("user_long",globalClass.getUser_long());
 
                     Log.d(TAG, "getParams: "+params);
                     return params;

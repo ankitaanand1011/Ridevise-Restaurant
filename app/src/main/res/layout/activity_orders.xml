@@ -77,10 +77,53 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/light_grey">
+
+        <TextView
+            android:id="@+id/tv_order_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="start"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="@string/customer_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:id="@+id/tv_order_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:gravity="start"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_5sdp"
+
+            android:text="@string/customer_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp" />
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_header"
+        android:layout_below="@+id/rl_top"
+        android:layout_marginBottom="@dimen/_30sdp"
        >
 
         <LinearLayout
@@ -290,18 +333,19 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
                         android:id="@+id/tv_order_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:textColor="@color/black"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:gravity="start"
                         android:text="@string/order_status"
-                        android:textSize="@dimen/_16sdp"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16sdp" />
                     <TextView
                         android:id="@+id/tv_order_status_val"
                         android:layout_width="wrap_content"
@@ -324,30 +368,32 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                   >
+
                     <TextView
                         android:id="@+id/tv_order_by"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginStart="@dimen/_10sdp"
+
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:textColor="@color/black"
+                        android:gravity="start"
                         android:text="By Subrata Ghosh - "
-                        android:textSize="@dimen/_14sdp"/>
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp" />
+
                     <TextView
                         android:id="@+id/tv_order_by_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:layout_toEndOf="@+id/tv_order_by"
-                        android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:textColor="@color/blue"
+                        android:layout_toEndOf="@+id/tv_order_by"
+                        android:gravity="start"
                         android:text="9977885566"
-                        android:textSize="@dimen/_14sdp"/>
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_14sdp" />
 
                 </RelativeLayout>
 
@@ -355,6 +401,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_30sdp"
+
                     android:visibility="gone"
                     android:layout_marginEnd="@dimen/_30sdp">
 

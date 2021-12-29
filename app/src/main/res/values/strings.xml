@@ -10,11 +10,16 @@
     <string name="today_order">Today\'s Orders</string>
     <string name="add">Add</string>
     <string name="no_order">It seems you have not added any \norders for today... \n\nYour orders will appear here.\n\nTap the add button for new order...</string>
+    <string name="add_customer_text1">It seems the customer you \nhave searched is not in our list... \n\nTap the button to add new customer...</string>
+    <string name="add_customer_text2">Tap the button \nto add new customer...</string>
+    <string name="add_customer">Add Customer</string>
     <string name="add_orders">Add Orders</string>
     <string name="customer_details">Customer Details</string>
     <string name="customer_name">Customer name</string>
     <string name="phone_number">Phone number</string>
     <string name="address">Address</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
     <string name="landmark">Landmark</string>
     <string name="pin_number">Pin number</string>
     <string name="order_details">Order Details</string>
@@ -27,6 +32,7 @@
     <string name="check_if">Check if paid</string>
     <string name="place_order">Place Order</string>
     <string name="customer">Customer</string>
+    <string name="search_customer">Search Customer</string>
     <string name="enter_mobile">Enter mobile number</string>
     <string name="next">Next</string>
     <string name="or">Or</string>
@@ -61,6 +67,8 @@
     <string name="contact_person">Contact person</string>
     <string name="location">Location</string>
     <string name="full_address">Full address</string>
+    <string name="open_time">Open Time</string>
+    <string name="close_time">Close Time</string>
     <string name="save">Save</string>
     <string name="f_pass">Forgot Password</string>
     <string name="text_f_pass">We will send OTP to registered\nmobile number to reset password</string>
@@ -85,4 +93,7 @@
     <string name="price">Price</string>
     <string name="delivered">Delivered</string>
 
+    <string name="default_notification_channel_id">Default</string>
+    <string name="default_notification_channel_name">Default channel</string>
+    <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
 </resources>

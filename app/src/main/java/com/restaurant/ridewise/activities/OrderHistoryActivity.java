@@ -140,13 +140,14 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                 String address = obj_data.get("address").getAsString().replaceAll("\"", "");;
                                 String order_date = obj_data.get("order_date").getAsString().replaceAll("\"", "");;
                                 String order_time = obj_data.get("order_time").getAsString().replaceAll("\"", "");;
-                                String delivery_date = obj_data.get("delivery_date").getAsString().replaceAll("\"", "");;
-                                String delivery_time = obj_data.get("delivery_time").getAsString().replaceAll("\"", "");;
+                            //    String delivery_date = obj_data.get("delivery_date").getAsString().replaceAll("\"", "");;
+                            //    String delivery_time = obj_data.get("delivery_time").getAsString().replaceAll("\"", "");;
                                 String sub_total = obj_data.get("sub_total").getAsString().replaceAll("\"", "");;
                                 String total_price = obj_data.get("total_price").getAsString().replaceAll("\"", "");;
                                 String delivery_charge = obj_data.get("delivery_charge").getAsString().replaceAll("\"", "");;
                                // String tax_charge = obj_data.get("tax_charge").getAsString().replaceAll("\"", "");;
                                 String status1 = obj_data.get("status").getAsString().replaceAll("\"", "");;
+                                String user_name = obj_data.get("user_name").getAsString().replaceAll("\"", "");;
                               //  String payment_type = obj_data.get("payment_type").getAsString().replaceAll("\"", "");;
 
                                 Log.d(TAG, "onResponse:order_id>>> " + order_id);
@@ -157,8 +158,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                 hashMap.put("address", address);
                                 hashMap.put("order_date", order_date);
                                 hashMap.put("order_time", order_time);
-                                hashMap.put("delivery_date", delivery_date);
-                                hashMap.put("delivery_time", delivery_time);
+                             //   hashMap.put("delivery_date", delivery_date);
+                              //  hashMap.put("delivery_time", delivery_time);
                                 hashMap.put("sub_total", sub_total);
                                 hashMap.put("total_price", total_price);
                                 hashMap.put("delivery_charge", delivery_charge);
@@ -171,6 +172,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
                              //   if(payment_type.equals("null")){
                                     hashMap.put("payment_type", "COD");
+                                    hashMap.put("user_name", user_name);
                                /* }else {
                                     hashMap.put("payment_type", payment_type);
                                 }

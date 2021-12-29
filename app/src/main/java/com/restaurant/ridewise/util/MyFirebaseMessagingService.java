@@ -1,4 +1,4 @@
-package com.restaurant.ridewise.activities;
+package com.restaurant.ridewise.util;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,6 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.restaurant.ridewise.R;
+import com.restaurant.ridewise.activities.HomeActivity;
 import com.restaurant.ridewise.util.Config;
 import com.restaurant.ridewise.util.NotificationUtils;
 
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -40,13 +42,55 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
     }
 
-
+/*
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("message"));
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.getData());
+        // ...
+
+        // TODO(developer): Handle FCM messages here.
+        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + remoteMessage.getNotification().getBody());
+
+        // Check if message contains a data payload.
+        if (remoteMessage.getData().size() > 0) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+
+            if (*/
+/* Check if data needs to be processed by long running job *//*
+ true) {
+                // For long-running tasks (10 seconds or more) use WorkManager.
+              //  scheduleJob();
+            } else {
+                // Handle message within 10 seconds
+               // handleNow();
+            }
+
+        }
+
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        }
+
+        // Also if you intend on generating your own notifications as a result of a received FCM
+        // message, here is where that should be initiated. See sendNotification method below.
+    }
+
+*/
+
+/*
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+    //    super.onMessageReceived(remoteMessage);
+
+        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + Objects.requireNonNull(remoteMessage.getNotification()).getBody());
+        Log.d(TAG, "From: " + remoteMessage.getNotification().getTitle());
+    //    Log.d(TAG, "From: " + remoteMessage.getNotification().getBody());
+     //   Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("message"));
+     //   Log.d(TAG, "onMessageReceived: " + remoteMessage.getData());
 
       //  sendNotification(remoteMessage.getData().get("message"));
         Intent intent = new Intent(this, HomeActivity.class);
@@ -63,7 +107,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
         }
         manager.notify(0, builder.build());
-    }
+    }*/
 
   /*  private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, HomeActivity.class);
@@ -97,8 +141,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 */
 
-   /* @Override
+    @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.e("fcm", "From: " + remoteMessage.getFrom());
+        if (remoteMessage != null) {
+            if (remoteMessage.getNotification() != null) {
+                Log.e("fcm", "Notification Body: " + remoteMessage.getNotification().getBody());
+                handleNotification(remoteMessage.getNotification().getBody());
+            }
+            if (remoteMessage.getData().size() > 0) {
+                Log.e("fcm", "Data Payload: " + remoteMessage.getData().toString());
+                try {
+                    handleDataMessage(new JSONObject(remoteMessage.getData().toString()));
+                } catch (Exception e) {
+                    Log.e("fcm", "Exception: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+  /*  public void onMessageReceived(RemoteMessage remoteMessage) {
       //  Log.e(TAG, "message: " + remoteMessage.getFrom());
       //  Log.e(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("message"));
@@ -122,7 +184,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
         }
-    }
+    }*/
 
     private void handleNotification(String message) {
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
@@ -192,21 +254,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    *//**
-     * Showing notification with text only
-     *//*
+    /*
+    Showing notification with text only
+     */
+
+
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
 
-    *//**
-     * Showing notification with text and image
-     *//*
+    /*
+    Showing notification with text and image
+     */
+
     private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
-    }*/
+    }
 }

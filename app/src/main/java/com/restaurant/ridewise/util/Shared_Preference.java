@@ -22,7 +22,8 @@ public class Shared_Preference {
 
     GlobalClass global_class;
     private boolean pref_logInStatus;
-    String id,  res_name, res_email, res_phone,res_address,res_address2,postal_code,res_image,open_time,close_time;
+    String id,  res_name, res_email, res_phone,res_address,res_address2,postal_code,res_image,
+            open_time,close_time,res_lat, res_long;
 
     private static final String PREFS_NAME = "preferences";
 
@@ -37,6 +38,8 @@ public class Shared_Preference {
     private static final String PREF_res_image="res_image";
     private static final String PREF_open_time="open_time";
     private static final String PREF_close_time="close_time";
+    private static final String PREF_res_lat="res_lat";
+    private static final String PREF_res_long="res_long";
 
 
 
@@ -95,6 +98,12 @@ public class Shared_Preference {
             close_time= global_class.getClose_time();
             editor.putString(PREF_close_time,close_time);
 
+            res_lat= global_class.getRes_lat();
+            editor.putString(PREF_res_lat,res_lat);
+
+            res_long= global_class.getRes_long();
+            editor.putString(PREF_res_long,res_long);
+
 
 
             editor.commit();
@@ -147,6 +156,16 @@ public class Shared_Preference {
 
             close_time=sharedPreferences.getString(PREF_close_time,"");
             global_class.setClose_time(close_time);
+
+            res_lat=sharedPreferences.getString(PREF_res_lat,"");
+            global_class.setRes_lat(res_lat);
+
+            res_long=sharedPreferences.getString(PREF_res_long,"");
+            global_class.setRes_long(res_long);
+
+
+
+
 
           /*  customer_token=sharedPreferences.getString(PREFcustomer_token,"");
             global_class.setCustomer_token(customer_token);*/

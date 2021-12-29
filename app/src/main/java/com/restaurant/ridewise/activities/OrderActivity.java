@@ -38,14 +38,14 @@ import java.util.Map;
 import es.dmoral.toasty.Toasty;
 
 public class OrderActivity extends AppCompatActivity {
-    String TAG = "dashboard";
+    String TAG = "OrderActivity";
     GlobalClass globalClass;
     Shared_Preference shared_preference;
     RelativeLayout rl_progress;
 
     ImageView iv_back;
     TextView tv_add,tv_order_details,tv_customer_details,tv_add_orders,tv_order_status,
-            tv_order_status_val,tv_order_by,tv_order_by_no,tv_start,tv_end;
+            tv_order_status_val,tv_order_by,tv_order_by_no,tv_start,tv_end,tv_order_no,tv_order_date;
     EditText et_t_amount,et_delivery_charge,et_amount,et_qty,et_item_details,et_pin,et_landmark,
             et_address,et_phn,et_customer_name;
     CheckBox cb_paid;
@@ -88,6 +88,8 @@ public class OrderActivity extends AppCompatActivity {
         tv_order_by_no = findViewById(R.id. tv_order_by_no);
         tv_start = findViewById(R.id. tv_start);
         tv_end = findViewById(R.id. tv_end);
+        tv_order_no = findViewById(R.id. tv_order_no);
+        tv_order_date = findViewById(R.id. tv_order_date);
 
     }
 
@@ -116,8 +118,10 @@ public class OrderActivity extends AppCompatActivity {
         tv_start.setTypeface(light);
         tv_end.setTypeface(light);
 
+
         tv_order_by.setTypeface(regular);
         tv_order_by_no.setTypeface(regular);
+        tv_order_date.setTypeface(regular);
 
 
         tv_add.setTypeface(medium);
@@ -127,6 +131,7 @@ public class OrderActivity extends AppCompatActivity {
         tv_order_details.setTypeface(semi_bold);
         tv_customer_details.setTypeface(semi_bold);
         tv_order_status.setTypeface(semi_bold);
+        tv_order_no.setTypeface(semi_bold);
 
 
         iv_back.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +193,41 @@ public class OrderActivity extends AppCompatActivity {
                             String total_price = order_details.get("total_price").getAsString().replaceAll("\"", "");
                             String delivery_charge = order_details.get("delivery_charge").getAsString().replaceAll("\"", "");
                             String order_status = order_details.get("status").getAsString().replaceAll("\"", "");
+                            String landmark = order_details.get("landmark").getAsString().replaceAll("\"", "");
+                            String zip = order_details.get("zip").getAsString().replaceAll("\"", "");
+
+                            SimpleDateFormat spf=new SimpleDateFormat("yyyy-MM-dd");
+                            Date newDate= null;
+                            try {
+                                newDate = spf.parse(order_date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            spf= new SimpleDateFormat("dd-MM-yyyy");
+                            String date = spf.format(newDate);
+                            System.out.println(date);
+
+
+                            SimpleDateFormat spf1=new SimpleDateFormat("hh:mm:ss");
+                            Date newDate1= null;
+                            try {
+                                newDate1 = spf1.parse(order_time);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            spf= new SimpleDateFormat("hh:mm aaa");
+                            String time = spf.format(newDate1);
+                            System.out.println(time);
+
+
+
+                            tv_order_date.setText(date+"  "+time);
+                            tv_order_no.setText("ORDER#"+order_id);
+
+
+                            et_address.setText(address);
+                            et_pin.setText(zip);
+                            et_landmark.setText(landmark);
 
 
                             StringBuilder all_items_name = new StringBuilder();
@@ -204,32 +244,32 @@ public class OrderActivity extends AppCompatActivity {
                                 String title = obj_data.get("title").getAsString().replaceAll("\"", "");
                                 String qty = obj_data.get("qty").getAsString().replaceAll("\"", "");
 
-                                all_items_name.append(title).append(','+" ");
+                                all_items_name.append(title).append('(').append(qty).append(')').append(',').append(" ");
 
                                 qtyNum = Integer.parseInt(qty);
                                 qtySum += qtyNum;
 
                             }
 
-                            JsonArray consumer_details = data.getAsJsonArray("consumer_details");
+                            JsonObject consumer_details = data.getAsJsonObject("consumer_details");
                             Log.d(TAG, "onResponse item_details: "+item_details);
 
-                            for( int i = 0 ; i < consumer_details.size() ; i++ ) {
+                          /*  for( int i = 0 ; i < consumer_details.size() ; i++ ) {
 
-                                JsonObject obj_data = consumer_details.get(i).getAsJsonObject();
-                                Log.d(TAG, "onResponse obj_data:  " + obj_data);
-                                String c_name = obj_data.get("name").getAsString().replaceAll("\"", "");
-                                String c_phone = obj_data.get("phone").getAsString().replaceAll("\"", "");
-                                String c_address = obj_data.get("address").getAsString().replaceAll("\"", "");
-                                String c_postal_code = obj_data.get("postal_code").getAsString().replaceAll("\"", "");
+                                JsonObject obj_data = consumer_details.get(i).getAsJsonObject();*/
+                              //  Log.d(TAG, "onResponse obj_data:  " + obj_data);
+                                String c_name = consumer_details.get("name").getAsString().replaceAll("\"", "");
+                                String c_phone = consumer_details.get("phone").getAsString().replaceAll("\"", "");
+                               // String c_address = obj_data.get("address").getAsString().replaceAll("\"", "");
+//                               String c_postal_code = consumer_details.get("postal_code").getAsString().replaceAll("\"", "");
+                           //    String landmark = consumer_details.get("landmark").getAsString().replaceAll("\"", "");
 
 
-                                et_customer_name.setText(c_name);
-                                et_phn.setText(c_phone);
-                                et_address.setText(c_address);
-                                et_pin.setText(c_postal_code);
 
-                            }
+
+                            et_customer_name.setText(c_name);
+                            et_phn.setText(c_phone);
+
 
                             double s_total = Double.parseDouble(sub_total);
                             @SuppressLint("DefaultLocale")
@@ -249,10 +289,26 @@ public class OrderActivity extends AppCompatActivity {
                             et_delivery_charge.setText("₹  "+del_charge);
                             et_t_amount.setText("₹  "+total_pr);
 
-                            SimpleDateFormat spf=new SimpleDateFormat("yyyy-MM-dd");
-                            Date newDate=spf.parse(order_date);
+
+                          /*  JsonObject rider_details = data.getAsJsonObject("rider_details");
+                            String rider_name = rider_details.get("name").getAsString().replaceAll("\"", "");
+                            String rider_mobile = rider_details.get("phone").getAsString().replaceAll("\"", "");
+
+
+                            tv_order_by.setText("Delivery by -   "+rider_name+" -");
+                            tv_order_by_no.setText(rider_mobile);*/
+
+
+
+
+
+
+
+
+                          /*  SimpleDateFormat spf2=new SimpleDateFormat("yyyy-MM-dd");
+                            Date newDate2=spf2.parse(order_date);
                             spf= new SimpleDateFormat("dd-MM-yyyy");
-                            String s_date = spf.format(newDate);
+                            String s_date = spf2.format(newDate2);
                            
                             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
                             SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a");
@@ -264,22 +320,31 @@ public class OrderActivity extends AppCompatActivity {
                          
                             } catch (ParseException e) {
                                 e.printStackTrace();
-                            }
-                            tv_start.setText(s_date+", "+s_time);
+                            }*/
+                            tv_start.setText(date+",  "+time);
 
 
                             switch (order_status) {
                                 case "1":
-                                    tv_order_status_val.setText("Order placed");
+                                    tv_order_status_val.setText("Order Placed");
                                     break;
                                 case "2":
-                                    tv_order_status_val.setText("In progress");
+                                    tv_order_status_val.setText("Out for Collect");
                                     break;
                                 case "3":
-                                    tv_order_status_val.setText("Completed");
+                                    tv_order_status_val.setText("Reached to Restaurant");
                                     break;
                                 case "4":
-                                    tv_order_status_val.setText("Canceled");
+                                    tv_order_status_val.setText("Start");
+                                    break;
+                                case "5":
+                                    tv_order_status_val.setText("Reached to Customer");
+                                    break;
+                                case "6":
+                                    tv_order_status_val.setText("Delivered");
+                                    break;
+                                case "7":
+                                    tv_order_status_val.setText("Cancelled");
                                     break;
                             }
 
