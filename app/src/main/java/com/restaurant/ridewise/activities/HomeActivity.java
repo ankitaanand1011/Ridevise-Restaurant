@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -198,7 +199,7 @@ public class HomeActivity extends AppCompatActivity{
     public void order_list() {
         //  mView.showDialog();
 
-        rl_progress.setVisibility(View.VISIBLE);
+       // rl_progress.setVisibility(View.VISIBLE);
         final String tag_string_req = "order_list";
         String url = ApplicationConstants.order_list;
 
@@ -307,7 +308,7 @@ public class HomeActivity extends AppCompatActivity{
                                 orderAdapter.notifyDataSetChanged();
 
                             }
-                            rl_progress.setVisibility(View.GONE);
+                         //   rl_progress.setVisibility(View.GONE);
 
 
                         }else{
@@ -323,7 +324,7 @@ public class HomeActivity extends AppCompatActivity{
                            // Toasty.info(HomeActivity.this, message, Toast.LENGTH_LONG).show();
                         }
 
-                        rl_progress.setVisibility(View.GONE);
+                       // rl_progress.setVisibility(View.GONE);
 
                     }catch (Exception e){
                         e.printStackTrace();
@@ -341,7 +342,7 @@ public class HomeActivity extends AppCompatActivity{
                 public void onErrorResponse(VolleyError error) {
                     Log.e(TAG, "order_list Error: " + error.getMessage());
                     Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_LONG).show();
-                    rl_progress.setVisibility(View.GONE);
+                   // rl_progress.setVisibility(View.GONE);
 
                 }
             }) {
@@ -373,28 +374,18 @@ public class HomeActivity extends AppCompatActivity{
         //  show_chat();
         super.onResume();
         //  startService(new  Intent(this, Service_class.class));
-        HomeActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("unique_name"));
-        HomeActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("logout_status"));
-        HomeActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("group_chat"));
-        HomeActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("grp_chat_broadcast"));
-        //Log.d("kite", "onResume: ");
+        HomeActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("order_broadcast"));
 
 
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
 
-   /*     tooltext.setText(global_class.title);
-        toolbar_image.setVisibility(View.INVISIBLE);
-        if (global_class.title.equals("Chat")){
-            toolbar_image.setVisibility(View.VISIBLE);
-        }else {
-            toolbar_image.setVisibility(View.INVISIBLE);
-        }
+                    order_list();
+                    handler.postDelayed(this, 60000);
+                }
+            }, 60000);
 
-        Log.d("vary", "aasdfghjk ");
-        shared_prefrence.loadPrefrence();
-        show_chat();
-        setupDrawerContent(navigationView);*/
-
-        // Log.d("ORRRR", "Call Onresume");
     }
 
     @Override
@@ -413,6 +404,7 @@ public class HomeActivity extends AppCompatActivity{
 
             String j = intent.getStringExtra("message");
             Log.d("MH", "intent_drwer_j >>>>" + j );
+            order_list();
         /*    if(j.equals("logout")){
                 shared_prefrence.clearPrefrence();
                 Intent intent_1 = new Intent(Drawer_Activity.this, Login_Screen.class);
@@ -436,4 +428,6 @@ public class HomeActivity extends AppCompatActivity{
 
         }
     };
+
+
 }

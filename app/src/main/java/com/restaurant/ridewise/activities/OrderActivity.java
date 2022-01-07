@@ -3,6 +3,7 @@ package com.restaurant.ridewise.activities;
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -399,4 +400,5 @@ public class OrderActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 }

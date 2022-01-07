@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     SpinKitView spinKitView;
     String device_id;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    String msg;
+    String token;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,10 +127,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         // Get new FCM registration token
-                        String token = task.getResult();
+                         token = task.getResult();
+                        Log.d(TAG, "onComplete token: "+token);
 
                         // Log and toast
-                         msg = getString(R.string.msg_token_fmt, token);
+                        String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
                      //   Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -325,7 +326,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     params.put("phone", mobile);
                     params.put("password", password);
-                    params.put("device_id", msg);
+                    params.put("device_id", token);
                     params.put("device_type", "android");
 
 

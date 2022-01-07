@@ -42,160 +42,67 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
     }
 
-/*
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // ...
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "From: " + remoteMessage.getNotification().getBody());
-
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (*/
-/* Check if data needs to be processed by long running job *//*
- true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-              //  scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-               // handleNow();
-            }
-
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
-    }
-
-*/
-
-/*
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-    //    super.onMessageReceived(remoteMessage);
-
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "From: " + Objects.requireNonNull(remoteMessage.getNotification()).getBody());
+        Log.d(TAG, "From: " + remoteMessage);
+        Log.d(TAG, "From: " + remoteMessage.getData().size());
         Log.d(TAG, "From: " + remoteMessage.getNotification().getTitle());
-    //    Log.d(TAG, "From: " + remoteMessage.getNotification().getBody());
-     //   Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("message"));
-     //   Log.d(TAG, "onMessageReceived: " + remoteMessage.getData());
 
-      //  sendNotification(remoteMessage.getData().get("message"));
+       if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Notification Body: " + remoteMessage.getNotification());
+            handleNotification(remoteMessage,remoteMessage.getNotification().getBody());
+        }
+        if (remoteMessage.getData().size() > 0) {
+            Log.d("fcm", "Data Payload: " + remoteMessage.getData().toString());
+            try {
+                handleDataMessage(new JSONObject(remoteMessage.getData().toString()));
+            } catch (Exception e) {
+                Log.d("fcm", "Exception: " + e.getMessage());
+            }
+        }
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String channelId = "Default";
-        NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, channelId)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.mipmap.app_logo1)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);;
+                .setContentTitle(Objects.requireNonNull(remoteMessage.getNotification()).getTitle())
+                .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);
+        ;
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
         manager.notify(0, builder.build());
-    }*/
-
-  /*  private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 *//* Request code *//*, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        String channelId = getString(R.string.default_notification_channel_id);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.mipmap.app_logo1)
-                     //   .setContentTitle(getString(R.string.fcm_message))
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Default channel",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        notificationManager.notify(0 *//* ID of notification *//*, notificationBuilder.build());
-    }
-*/
-
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.e("fcm", "From: " + remoteMessage.getFrom());
-        if (remoteMessage != null) {
-            if (remoteMessage.getNotification() != null) {
-                Log.e("fcm", "Notification Body: " + remoteMessage.getNotification().getBody());
-                handleNotification(remoteMessage.getNotification().getBody());
-            }
-            if (remoteMessage.getData().size() > 0) {
-                Log.e("fcm", "Data Payload: " + remoteMessage.getData().toString());
-                try {
-                    handleDataMessage(new JSONObject(remoteMessage.getData().toString()));
-                } catch (Exception e) {
-                    Log.e("fcm", "Exception: " + e.getMessage());
-                }
-            }
-        }
     }
 
-  /*  public void onMessageReceived(RemoteMessage remoteMessage) {
-      //  Log.e(TAG, "message: " + remoteMessage.getFrom());
-      //  Log.e(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.getData().get("message"));
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification().getBody());
-
-
-        }
-
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
-
-            try {
-                JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                handleDataMessage(json);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception: " + e.getMessage());
-            }
-        }
-    }*/
-
-    private void handleNotification(String message) {
+    private void handleNotification(RemoteMessage remoteMessage,String message) {
+        Log.d(TAG, "handleNotification: "+message);
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             // app is in foreground, broadcast the push message
-
-
 
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
             pushNotification.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, pushNotification, PendingIntent.FLAG_ONE_SHOT);
+            String channelId = "Default";
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.mipmap.app_logo1)
+                    .setContentTitle(Objects.requireNonNull(remoteMessage.getNotification()).getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);
+            ;
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
+                manager.createNotificationChannel(channel);
+            }
+            manager.notify(0, builder.build());
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();
@@ -205,58 +112,70 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
+        Log.d(TAG, "push json: " + json.toString());
 
         try {
-            JSONObject data = json.getJSONObject("data");
+            //    JSONObject data = json.getJSONObject("data");
 
-            String title = data.getString("title");
-            String message = data.getString("message");
-            boolean isBackground = data.getBoolean("is_background");
-            String imageUrl = data.getString("image");
-            String timestamp = data.getString("timestamp");
-            JSONObject payload = data.getJSONObject("payload");
+            String title = json.getString("title");
+            String body = json.getString("body");
+            /* String message = json.getString("message");
+             boolean isBackground = json.getBoolean("is_background");
+             String imageUrl = json.getString("image");
+             String timestamp = json.getString("timestamp");
+             JSONObject payload = json.getJSONObject("payload");*/
 
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "isBackground: " + isBackground);
-            Log.e(TAG, "payload: " + payload.toString());
-            Log.e(TAG, "imageUrl: " + imageUrl);
-            Log.e(TAG, "timestamp: " + timestamp);
+            Log.d(TAG, "title: " + title);
+            Log.d(TAG, "body: " + body);
 
 
-            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-                // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
-                // play notification sound
-                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-                notificationUtils.playNotificationSound();
-            } else {
-                // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                resultIntent.putExtra("message", message);
-
-                // check for image attachment
-                if (TextUtils.isEmpty(imageUrl)) {
-                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
-                } else {
-                    // image is present, show notification with image
-                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
-                }
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            String channelId = "Default";
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.mipmap.app_logo1)
+                    .setContentTitle(title)
+                    .setContentText(body).setAutoCancel(true).setContentIntent(pendingIntent);
+            ;
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
+                manager.createNotificationChannel(channel);
             }
+            manager.notify(0, builder.build());
+
+            grp_chat_broadcast(MyFirebaseMessagingService.this,body);
+            
+            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+            notificationUtils.playNotificationSound();
+
+
         } catch (JSONException e) {
-            Log.e(TAG, "Json Exception: " + e.getMessage());
+            Log.d(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+            Log.d(TAG, "Exception: " + e.getMessage());
         }
     }
 
     /*
     Showing notification with text only
      */
+
+    static void grp_chat_broadcast(Context context, String message) {
+
+        Intent intent = new Intent("order_broadcast");
+
+        //put whatever data you want to send, if any
+        intent.putExtra("message", message);
+     //   intent.putExtra("message_body", msg_body);
+
+
+        //send broadcast
+        context.sendBroadcast(intent);
+    }
+
 
 
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {

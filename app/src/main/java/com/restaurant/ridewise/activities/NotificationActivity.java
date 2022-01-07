@@ -1,7 +1,13 @@
 package com.restaurant.ridewise.activities;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,11 +47,12 @@ public class NotificationActivity extends AppCompatActivity {
     GlobalClass globalClass;
     Shared_Preference shared_preference;
     RelativeLayout rl_progress;
-    
+
     ImageView iv_back;
     TextView tv_header;
     private ArrayList<HashMap<String, String>> notification_list;
     RecyclerView rv_notification;
+
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +64,12 @@ public class NotificationActivity extends AppCompatActivity {
 
 
     private void initialization() {
-        globalClass = (GlobalClass)getApplicationContext();
+        globalClass = (GlobalClass) getApplicationContext();
         shared_preference = new Shared_Preference(this);
         shared_preference.loadPrefrence();
         rl_progress = findViewById(R.id.rl_progress);
-        
-        iv_back = findViewById(R.id. iv_back);
+
+        iv_back = findViewById(R.id.iv_back);
         tv_header = findViewById(R.id.tv_header);
         rv_notification = findViewById(R.id.rv_notification);
     }
@@ -103,11 +110,12 @@ public class NotificationActivity extends AppCompatActivity {
         final String tag_string_req = "res_notifications";
         String url = ApplicationConstants.res_notifications;
 
-        try{
+        try {
             StringRequest strReq = new StringRequest(Request.Method.POST,
-                    url, new Response.Listener<String>(){
+                    url, new Response.Listener<String>() {
 
 
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(String response) {
                     Log.d(TAG, "menu_list Response: " + response);
@@ -120,24 +128,27 @@ public class NotificationActivity extends AppCompatActivity {
 
                         JsonObject jobj = gson.fromJson(response, JsonObject.class);
                         String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                        String message =jobj.get("message").getAsString().replaceAll("\"", "");
+                        String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
 
-                        Log.d(TAG, "Message: "+message);
+                        Log.d(TAG, "Message: " + message);
 
 
-                        if(status.equals("1")) {
+                        if (status.equals("1")) {
                             notification_list.clear();
                             JsonArray data = jobj.getAsJsonArray("response");
-                            Log.d(TAG, "onResponse menu_list_arr: "+data);
+                            Log.d(TAG, "onResponse menu_list_arr: " + data);
 
-                            for( int i = 0 ; i < data.size() ; i++ ) {
+                            for (int i = 0; i < data.size(); i++) {
 
                                 JsonObject obj_data = data.get(i).getAsJsonObject();
-                                Log.d(TAG, "onResponse obj_data:  "+obj_data);
-                                String title = obj_data.get("title").getAsString().replaceAll("\"", "");;
-                                String description = obj_data.get("description").getAsString().replaceAll("\"", "");;
-                                String created_at = obj_data.get("created_at").getAsString().replaceAll("\"", "");;
+                                Log.d(TAG, "onResponse obj_data:  " + obj_data);
+                                String title = obj_data.get("title").getAsString().replaceAll("\"", "");
+                                ;
+                                String description = obj_data.get("description").getAsString().replaceAll("\"", "");
+                                ;
+                                String created_at = obj_data.get("created_at").getAsString().replaceAll("\"", "");
+                                ;
 
 
                                 HashMap<String, String> hashMap = new HashMap<>();
@@ -156,19 +167,16 @@ public class NotificationActivity extends AppCompatActivity {
                             notificationAdapter.notifyDataSetChanged();
 
 
-
-
-                        }else{
+                        } else {
 
                             Toasty.info(NotificationActivity.this, message, Toast.LENGTH_LONG).show();
                         }
 
                         rl_progress.setVisibility(View.GONE);
 
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-
 
 
                     //  mView.hideDialog();
@@ -190,9 +198,9 @@ public class NotificationActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() {
                     // Posting parameters to login url
                     Map<String, String> params = new HashMap<>();
-                    params.put("res_id",globalClass.getId());
+                    params.put("res_id", globalClass.getId());
 
-                    Log.d(TAG, "getParams: "+params);
+                    Log.d(TAG, "getParams: " + params);
                     return params;
                 }
 
@@ -201,10 +209,48 @@ public class NotificationActivity extends AppCompatActivity {
             globalClass.addToRequestQueue(NotificationActivity.this, strReq, tag_string_req);
 
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ///////
+            String s = intent.getStringExtra("message_body");
+            String p = intent.getStringExtra("message");
+            Log.d("MH", "onReceive: chat " + s + " " + p);
+
+
+            res_notifications();
+        }
+    };
+
+    @Override
+    public void onResume() {
+
+        //  show_chat();
+        super.onResume();
+        // check_device();
+        NotificationActivity.this.registerReceiver(mMessageReceiver, new IntentFilter("order_broadcast"));
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+
+                res_notifications();
+                handler.postDelayed(this, 60000);
+            }
+        }, 60000);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NotificationActivity.this.unregisterReceiver(mMessageReceiver);
+
+
     }
 
 }
