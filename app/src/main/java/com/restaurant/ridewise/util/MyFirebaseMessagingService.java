@@ -103,6 +103,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 manager.createNotificationChannel(channel);
             }
             manager.notify(0, builder.build());
+
+            grp_chat_broadcast(MyFirebaseMessagingService.this,remoteMessage.getNotification().getBody());
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();

@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -138,6 +140,25 @@ public class SearchCustomerActivity extends AppCompatActivity {
         });
 
 
+        et_search_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, "beforeTextChanged: "+s);
+                Log.d(TAG, "beforeTextChanged count: "+count);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: "+s);
+                Log.d(TAG, "onTextChanged count: "+count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "afterTextChanged: "+s);
+
+            }
+        });
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

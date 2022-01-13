@@ -90,9 +90,10 @@
         android:layout_below="@+id/rl_header"
         android:background="@color/light_green">
 
-        <androidx.appcompat.widget.SearchView xmlns:n2="http://schemas.android.com/tools"
+        <androidx.appcompat.widget.SearchView
+            xmlns:n2="http://schemas.android.com/tools"
             android:id="@+id/search"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
@@ -101,6 +102,7 @@
             android:background="@drawable/et_bg_white"
             android:hint="@string/enter_mobile"
             android:textSize="@dimen/_12sdp"
+
             n2:searchIcon="@mipmap/search" />
 
         <EditText
@@ -109,6 +111,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textAllCaps="true"
+            android:visibility="gone"
             android:hint="@string/enter_mobile"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
@@ -120,7 +123,7 @@
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:textSize="@dimen/_12sdp"
-            android:visibility="gone"
+
             android:drawableEnd="@mipmap/search"
             android:background="@drawable/et_bg_white"
             />

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.restaurant.ridewise.R;
+import com.restaurant.ridewise.activities.CartActivity;
 import com.restaurant.ridewise.activities.MenuActivity;
 import com.restaurant.ridewise.util.ApplicationConstants;
 import com.restaurant.ridewise.util.GlobalClass;
@@ -109,6 +111,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
 
                 add_cart(qty,menu_id,total_price_acc_qty,holder.ll_count);
+
             }
         });
 
@@ -167,7 +170,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
                 }
             }
         });
-
 
     }
 
@@ -263,10 +265,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
                         }
 
-                        String item_count = data.size() +" ITEMS ₹ "+total_amount;
-                        tv_item_count.setText(item_count);
-
+                      /*  String item_count = data.size() +" ITEMS ₹ "+total_amount;
+                        tv_item_count.setText(item_count);*/
                         Toasty.success(context, message, Toast.LENGTH_LONG).show();
+
 
 
                     }catch (Exception e){
@@ -315,6 +317,167 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             e.printStackTrace();
         }
     }
+    public void cart_details() {
+        //  mView.showDialog();
 
+     //   rl_progress.setVisibility(View.VISIBLE);
+        final String tag_string_req = "cart_details";
+        String url = ApplicationConstants.cart_details;
+
+        try{
+            StringRequest strReq = new StringRequest(Request.Method.POST,
+                    url, new Response.Listener<String>(){
+
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d(TAG, "menu_list Response: " + response);
+
+
+                    Gson gson = new Gson();
+
+                    try {
+
+
+                        JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                        String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                        String message =jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                        Log.d(TAG, "Message: "+message);
+
+
+                        if(status.equals("1")) {
+                            item_list.clear();
+                            JsonObject data = jobj.getAsJsonObject("response");
+                            String sub_total = data.get("sub_total").getAsString().replaceAll("\"", "");;
+                            String delivery_charge = data.get("delivery_charge").getAsString().replaceAll("\"", "");;
+                            String tax_charge = data.get("tax_charge").getAsString().replaceAll("\"", "");;
+                            String total_payable = data.get("total_payable").getAsString().replaceAll("\"", "");;
+
+
+
+
+                            JsonArray cart_details = data.getAsJsonArray("cart_details");
+                            Log.d(TAG, "onResponse menu_list_arr: "+cart_details);
+
+                     /*       for( int i = 0 ; i < cart_details.size() ; i++ ) {
+
+                                JsonObject obj_data = cart_details.get(i).getAsJsonObject();
+                                Log.d(TAG, "onResponse obj_data:  "+obj_data);
+                                String qty = obj_data.get("qty").getAsString().replaceAll("\"", "");;
+                                String cart_id = obj_data.get("cart_id").getAsString().replaceAll("\"", "");;
+                                String menu_name = obj_data.get("menu_name").getAsString().replaceAll("\"", "");;
+                                String menu_id = obj_data.get("menu_id").getAsString().replaceAll("\"", "");;
+                                String category_id = obj_data.get("category_id").getAsString().replaceAll("\"", "");;
+                                String description = obj_data.get("description").getAsString().replaceAll("\"", "");;
+                                String price = obj_data.get("price").getAsString().replaceAll("\"", "");;
+                                String veg_nonveg = obj_data.get("veg_nonveg").getAsString().replaceAll("\"", "");;
+                                String prepare_time = obj_data.get("prepare_time").getAsString().replaceAll("\"", "");;
+                                String menu_image = obj_data.get("menu_image").getAsString().replaceAll("\"", "");;
+
+
+                                HashMap<String, String> hashMap = new HashMap<>();
+                                hashMap.put("menu_id", menu_id);
+                                hashMap.put("menu_name", menu_name);
+                                hashMap.put("category_id", category_id);
+                                hashMap.put("cart_id", cart_id);
+                                hashMap.put("description", description);
+                                hashMap.put("veg_nonveg", veg_nonveg);
+                                hashMap.put("price", price);
+                                hashMap.put("prepare_time", prepare_time);
+                                hashMap.put("menu_image", menu_image);
+                                hashMap.put("qty", qty);
+
+                                item_list.add(hashMap);
+                            }
+                            double s_total = Double.parseDouble(sub_total);
+                            @SuppressLint("DefaultLocale")
+                            String su_total = String.format("%.2f", s_total);
+
+                            double s_delivery_charge = Double.parseDouble(delivery_charge);
+                            @SuppressLint("DefaultLocale")
+                            String su_delivery_charge = String.format("%.2f", s_delivery_charge);
+
+                            double s_tax_charge = Double.parseDouble(tax_charge);
+                            @SuppressLint("DefaultLocale")
+                            String su_tax_charge = String.format("%.2f", s_tax_charge);
+
+                            double s_total_payable = Double.parseDouble(total_payable);
+                            @SuppressLint("DefaultLocale")
+                            String su_total_payable = String.format("%.2f", s_total_payable);
+*/
+
+                           /* tv_subtotal_value.setText("₹  "+su_total);
+                            tv_delivery_value.setText("₹  "+su_delivery_charge);
+                            tv_tax_value.setText("₹  "+su_tax_charge);
+                            tv_total_value.setText("₹  "+su_total_payable);*/
+
+                            globalClass.setTotal_item_price_acc_qty(Double.parseDouble(sub_total));
+
+                            String item_count = cart_details.size() +" ITEMS  ₹ "+sub_total;
+                            tv_item_count.setText(item_count);
+
+
+
+                        /*    rv_cart.setLayoutManager(new LinearLayoutManager(CartActivity.this, LinearLayoutManager.VERTICAL, false));
+                            CartAdapter cartAdapter = new CartAdapter(CartActivity.this, item_list);
+                            rv_cart.setAdapter(cartAdapter);
+                            cartAdapter.notifyDataSetChanged();*/
+
+
+
+
+                        }else{
+
+                            Toasty.info(context, message, Toast.LENGTH_LONG).show();
+                        }
+
+                       // rl_progress.setVisibility(View.GONE);
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+
+
+                    //  mView.hideDialog();
+
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "menu_list Error: " + error.getMessage());
+                    Toast.makeText(context, "Connection Error", Toast.LENGTH_LONG).show();
+                  //  rl_progress.setVisibility(View.GONE);
+
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting parameters to login url
+                    Map<String, String> params = new HashMap<>();
+                    params.put("res_id",globalClass.getId());
+                    params.put("user_id",globalClass.getUser_id());
+                    params.put("user_lat",globalClass.getUser_lat());
+                    params.put("user_long",globalClass.getUser_long());
+
+                    Log.d(TAG, "getParams: "+params);
+                    return params;
+                }
+
+            };
+
+            globalClass.addToRequestQueue(context, strReq, tag_string_req);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
